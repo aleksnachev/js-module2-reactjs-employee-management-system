@@ -1,3 +1,5 @@
+import { fromIsoDate } from "../utils/dateTimeutils.js";
+
 export default function UserItem({
     _id,
     firstName,
@@ -18,7 +20,7 @@ export default function UserItem({
             <td>{lastName}</td>
             <td>{email}</td>
             <td>{phoneNumber}</td>
-            <td>{createdAt}</td>
+            <td>{fromIsoDate(createdAt)}</td>
             {/* <td>June 28, 2022</td> */}
 
             <td className="actions">
