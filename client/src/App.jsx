@@ -73,7 +73,11 @@ function App() {
                     <Pagination/>
                 </section>
 
-                {showCreateUser && <CreateUserModal onClose={closeUserModalHandler} onSubmit={addUserSubmitHandler}/>}
+                {showCreateUser && 
+                    <CreateUserModal
+                        onClose={closeUserModalHandler}
+                        onSubmit={addUserSubmitHandler}
+                    />}
             </main>
             <Footer />
         </div>
