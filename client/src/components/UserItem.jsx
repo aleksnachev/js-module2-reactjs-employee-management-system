@@ -8,7 +8,8 @@ export default function UserItem({
     phoneNumber,
     createdAt,
     imageUrl, 
-    onDetailsClick
+    onDetailsClick,
+    onDeleteClick
 }) {
 
     return (
@@ -44,7 +45,7 @@ export default function UserItem({
                 </button>
 
                 {/* Delete */}
-                <button className="btn delete-btn" title="Delete">
+                <button className="btn delete-btn" title="Delete" onClick={() => onDeleteClick(_id)}>
                     <svg
                         aria-hidden="true"
                         focusable="false"
