@@ -32,6 +32,10 @@ function App() {
         setShowCreateUser(false)
     }
 
+    const sortUsersHandler = () =>{
+        setUsers(state => [...state].sort())
+    }
+
     const addUserSubmitHandler = (event) =>{
         event.preventDefault()
 
@@ -69,7 +73,7 @@ function App() {
                 <section className="card users-container">
                     <Search/>
 
-                    <UserList users={users} forceUserRefresh = {forceUserRefresh}/>
+                    <UserList users={users} forceUserRefresh = {forceUserRefresh} onSort= {sortUsersHandler}/>
 
                     <button className="btn-add btn" onClick = {addUserClickHandler}>Add new user</button>
 

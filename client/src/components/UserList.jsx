@@ -6,7 +6,8 @@ import UserSaveModal from "./UserSaveModal.jsx";
 
 export default function UserList({
     users,
-    forceUserRefresh
+    forceUserRefresh,
+    onSort
 }) {
     const [showUserDetails, setShowUserDetails] = useState(false)
     const [showUserDelete, setShowUserDelete] = useState(false)
@@ -40,9 +41,9 @@ export default function UserList({
         e.preventDefault()
 
         const formData = new FormData(e.target)
-        const {country,city,street,streetNumber, ...userData} = Object.fromEntries(formData)
+        const { country, city, street, streetNumber, ...userData } = Object.fromEntries(formData)
 
-        userData.address={
+        userData.address = {
             country,
             city,
             street,
@@ -51,17 +52,17 @@ export default function UserList({
 
         userData.updatedAt = new Date().toISOString()
 
-        try{
+        try {
             await fetch(`http://localhost:3030/jsonstore/users/${showSelectedUserId}`, {
-                method:'PATCH',
-                headers:{
-                    'content-type':'application/json'
+                method: 'PATCH',
+                headers: {
+                    'content-type': 'application/json'
                 },
                 body: JSON.stringify(userData)
             })
 
             closeModalHandler()
-        }catch(err){
+        } catch (err) {
             alert(err.message)
         }
     }
@@ -73,7 +74,27 @@ export default function UserList({
             <table className="table">
                 <thead>
                     <tr>
-                        <th>Image</th>
+                        {/* === Image === */}
+                        <th>
+                            Image
+                            <svg
+                                aria-hidden="true"
+                                focusable="false"
+                                data-prefix="fas"
+                                data-icon="arrow-down"
+                                className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn"
+                                role="img"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 384 512"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z"
+                                ></path>
+                            </svg>
+                        </th>
+
+                        {/* === First name === */}
                         <th>
                             First name
                             <svg
@@ -92,11 +113,106 @@ export default function UserList({
                                 ></path>
                             </svg>
                         </th>
-                        <th>Last name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Created</th>
-                        <th>Actions</th>
+
+                        {/* === Last name === */}
+                        <th>
+                            Last name
+                            <svg
+                                aria-hidden="true"
+                                focusable="false"
+                                data-prefix="fas"
+                                data-icon="arrow-down"
+                                className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn"
+                                role="img"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 384 512"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z"
+                                ></path>
+                            </svg>
+                        </th>
+
+                        {/* === Email === */}
+                        <th>
+                            Email
+                            <svg
+                                aria-hidden="true"
+                                focusable="false"
+                                data-prefix="fas"
+                                data-icon="arrow-down"
+                                className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn"
+                                role="img"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 384 512"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z"
+                                ></path>
+                            </svg>
+                        </th>
+
+                        {/* === Phone === */}
+                        <th>
+                            Phone
+                            <svg
+                                aria-hidden="true"
+                                focusable="false"
+                                data-prefix="fas"
+                                data-icon="arrow-down"
+                                className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn"
+                                role="img"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 384 512"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z"
+                                ></path>
+                            </svg>
+                        </th>
+
+                        {/* === Created === */}
+                        <th onClick={onSort}>
+                            Created
+                            <svg
+                                aria-hidden="true"
+                                focusable="false"
+                                data-prefix="fas"
+                                data-icon="arrow-down"
+                                className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn"
+                                role="img"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 384 512"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z"
+                                ></path>
+                            </svg>
+                        </th>
+
+                        {/* === Actions === */}
+                        <th>
+                            Actions
+                            <svg
+                                aria-hidden="true"
+                                focusable="false"
+                                data-prefix="fas"
+                                data-icon="arrow-down"
+                                className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn"
+                                role="img"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 384 512"
+                            >
+                                <path
+                                    fill="currentColor"
+                                    d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z"
+                                ></path>
+                            </svg>
+                        </th>
                     </tr>
                 </thead>
 
