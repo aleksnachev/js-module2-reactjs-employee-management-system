@@ -2,6 +2,7 @@ import { useState } from "react";
 import UserDetails from "./UserDetails.jsx";
 import UserItem from "./UserItem.jsx";
 import UserDeleteModal from "./UserDeleteModal.jsx";
+import UserSaveModal from "./UserSaveModal.jsx";
 
 export default function UserList({
     users,
@@ -9,6 +10,7 @@ export default function UserList({
 }) {
     const [showUserDetails, setShowUserDetails] = useState(false)
     const [showUserDelete, setShowUserDelete] = useState(false)
+    const [showUserEdit, setShowUserEdit] = useState(false)
     const [showSelectedUserId, setSelectedUserId] = useState(null)
 
     const detailsActionClickHandler = (userId) => {
@@ -16,15 +18,52 @@ export default function UserList({
         setSelectedUserId(userId)
     }
 
-    const deleteActionClickNahdler =(userId) =>{
+    const deleteActionClickNahdler = (userId) => {
         setSelectedUserId(userId)
         setShowUserDelete(true)
+    }
+
+    const editActionClickHandler = (userId) => {
+        setSelectedUserId(userId)
+        setShowUserEdit(true)
     }
 
     const closeModalHandler = () => {
         setShowUserDetails(false)
         setShowUserDelete(false)
+        setShowUserEdit(false)
         setSelectedUserId(null)
+        forceUserRefresh()
+    }
+
+    const editUserHandler = async (e) => {
+        e.preventDefault()
+
+        const formData = new FormData(e.target)
+        const {country,city,street,streetNumber, ...userData} = Object.fromEntries(formData)
+
+        userData.address={
+            country,
+            city,
+            street,
+            streetNumber
+        }
+
+        userData.updatedAt = new Date().toISOString()
+
+        try{
+            await fetch(`http://localhost:3030/jsonstore/users/${showSelectedUserId}`, {
+                method:'PATCH',
+                headers:{
+                    'content-type':'application/json'
+                },
+                body: JSON.stringify(userData)
+            })
+
+            closeModalHandler()
+        }catch(err){
+            alert(err.message)
+        }
     }
 
     return (
@@ -63,11 +102,12 @@ export default function UserList({
 
                 <tbody>
                     {users.map(user => (
-                        <UserItem 
+                        <UserItem
                             {...user}
-                            key={user._id} 
+                            key={user._id}
                             onDetailsClick={detailsActionClickHandler}
-                            onDeleteClick = {deleteActionClickNahdler}
+                            onDeleteClick={deleteActionClickNahdler}
+                            onEditClick={editActionClickHandler}
                         />
                     ))}
                 </tbody>
@@ -75,16 +115,24 @@ export default function UserList({
 
             {showUserDetails && (
                 <UserDetails
-                    userId = {showSelectedUserId}
-                    onClose = {closeModalHandler}
+                    userId={showSelectedUserId}
+                    onClose={closeModalHandler}
                 />
             )}
 
             {showUserDelete && (
                 <UserDeleteModal
-                    userId = {showSelectedUserId}
-                    onClose = {closeModalHandler}
-                    forceUserRefresh ={forceUserRefresh}
+                    userId={showSelectedUserId}
+                    onClose={closeModalHandler}
+                />
+            )}
+
+            {showUserEdit && (
+                <UserSaveModal
+                    userId={showSelectedUserId}
+                    onClose={closeModalHandler}
+                    onSubmit={editUserHandler}
+                    editMode
                 />
             )}
         </div>
