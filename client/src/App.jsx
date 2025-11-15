@@ -33,7 +33,7 @@ function App() {
     }
 
     const sortUsersHandler = () =>{
-        setUsers(state => [...state].sort())
+        setUsers(state => [...state].sort((userA ,userB) => new Date(userB.createdAt) - new Date(userA.createdAt)))
     }
 
     const addUserSubmitHandler = (event) =>{
